@@ -4,7 +4,10 @@ import tailwind from '@astrojs/tailwind';
 
 // https://astro.build/config
 export default defineConfig({
+  site: 'https://Ali-belkadhi.github.io',
+  base: '/wedding',
   integrations: [tailwind({
     applyBaseStyles: false
   })]
 });
+
