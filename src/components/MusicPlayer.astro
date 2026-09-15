@@ -1,10 +1,12 @@
 ---
 import { wedding } from '../data/wedding';
+const localAudio = `${import.meta.env.BASE_URL.replace(/\/$/, '')}/audio/wedding-music.mp3`;
 ---
 
 <div id="music-player-container" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 rtl:right-auto rtl:left-4 sm:rtl:left-6 z-40">
   <!-- Hidden Audio Element -->
   <audio id="wedding-audio" loop preload="auto">
+    <source src={localAudio} type="audio/mpeg" />
     <source src={wedding.music.src} type="audio/mpeg" />
   </audio>
 
@@ -119,24 +121,23 @@ import { wedding } from '../data/wedding';
   };
 
   const startAudio = () => {
-    if (isPlaying || userManuallyPaused) return;
-    if (audio) {
-      const promise = audio.play();
-      if (promise !== undefined) {
-        promise.then(() => {
+    if (isPlaying || userManuallyPaused || !audio) return;
+    audio.volume = 0.8;
+    const promise = audio.play();
+    if (promise !== undefined) {
+      promise.then(() => {
+        setPlayingState(true);
+      }).catch((err: Error) => {
+        if (err.name === 'NotAllowedError') {
+          // Autoplay blocked by browser policy without user gesture yet;
+          // listener on next gesture will fire it immediately
+          setupFirstInteractionListener();
+        } else {
+          // Network or decoding error; fallback to synth
+          playSoftHarpChords();
           setPlayingState(true);
-        }).catch((err: Error) => {
-          if (err.name === 'NotAllowedError') {
-            // Autoplay blocked by browser policy without user gesture yet;
-            // set up one-time listener on next touch/click
-            setupFirstInteractionListener();
-          } else {
-            // Network or decoding error; fallback to synth
-            playSoftHarpChords();
-            setPlayingState(true);
-          }
-        });
-      }
+        }
+      });
     }
   };
 
@@ -153,30 +154,27 @@ import { wedding } from '../data/wedding';
     };
 
     const cleanupListeners = () => {
-      ['click', 'touchstart', 'pointerdown', 'keydown'].forEach((evt) => {
+      ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'keydown', 'scroll', 'wheel'].forEach((evt) => {
         window.removeEventListener(evt, onUserInteraction);
+        document.removeEventListener(evt, onUserInteraction);
       });
-      window.removeEventListener('invitation-opened', onUserInteraction);
     };
 
-    ['click', 'touchstart', 'pointerdown', 'keydown'].forEach((evt) => {
+    ['click', 'touchstart', 'touchend', 'pointerdown', 'mousedown', 'keydown', 'scroll', 'wheel'].forEach((evt) => {
       window.addEventListener(evt, onUserInteraction, { once: true, passive: true });
+      document.addEventListener(evt, onUserInteraction, { once: true, passive: true });
     });
-    window.addEventListener('invitation-opened', onUserInteraction, { once: true });
   };
 
-  // 1. Attempt immediate autoplay on load
+  // Immediate attempt
   startAudio();
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', startAudio);
+  }
+  window.addEventListener('load', startAudio);
 
-  // 2. Prepare interaction trigger immediately in case browser blocks unprompted autoplay
+  // Setup interaction listener as backup for strict browser autoplay policies
   setupFirstInteractionListener();
-
-  // 3. Listen to opening screen unlock
-  window.addEventListener('invitation-opened', () => {
-    if (!userManuallyPaused && !isPlaying) {
-      startAudio();
-    }
-  });
 
   btn?.addEventListener('click', () => {
     if (!isPlaying) {
