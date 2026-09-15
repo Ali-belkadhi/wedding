@@ -1,0 +1,1 @@
+import{g as e}from"./index.CzGW6FVa.js";import{S as o}from"./ScrollTrigger.DNECHiyU.js";e.registerPlugin(o);e.from("#welcome .welcome-reveal",{scrollTrigger:{trigger:"#welcome",start:"top 75%",toggleActions:"play none none none"},y:35,opacity:0,duration:1.1,stagger:.15,ease:"power3.out"});
