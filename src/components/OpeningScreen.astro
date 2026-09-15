@@ -108,6 +108,9 @@ import { wedding } from '../data/wedding';
     if (isDismissed || !screen) return;
     isDismissed = true;
 
+    // Dispatch immediately within user click/interaction gesture for seamless audio playback
+    window.dispatchEvent(new CustomEvent('invitation-opened'));
+
     sessionStorage.setItem('invitation_opened', 'true');
     document.body.classList.remove('overflow-hidden');
     document.documentElement.classList.remove('overflow-hidden');
@@ -120,7 +123,6 @@ import { wedding } from '../data/wedding';
       onComplete: () => {
         screen.style.display = 'none';
         screen.remove();
-        window.dispatchEvent(new CustomEvent('invitation-opened'));
       }
     });
   };

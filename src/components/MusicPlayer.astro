@@ -4,7 +4,7 @@ import { wedding } from '../data/wedding';
 
 <div id="music-player-container" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 rtl:right-auto rtl:left-4 sm:rtl:left-6 z-40">
   <!-- Hidden Audio Element -->
-  <audio id="wedding-audio" loop preload="none">
+  <audio id="wedding-audio" loop preload="auto">
     <source src={wedding.music.src} type="audio/mpeg" />
   </audio>
 
@@ -54,6 +54,7 @@ import { wedding } from '../data/wedding';
   const statusText = document.getElementById('music-status-text');
 
   let isPlaying = false;
+  let userManuallyPaused = false;
 
   // Web Audio Synthesizer fallback in case external audio link fails
   let audioContext: AudioContext | null = null;
@@ -117,8 +118,69 @@ import { wedding } from '../data/wedding';
     }
   };
 
+  const startAudio = () => {
+    if (isPlaying || userManuallyPaused) return;
+    if (audio) {
+      const promise = audio.play();
+      if (promise !== undefined) {
+        promise.then(() => {
+          setPlayingState(true);
+        }).catch((err: Error) => {
+          if (err.name === 'NotAllowedError') {
+            // Autoplay blocked by browser policy without user gesture yet;
+            // set up one-time listener on next touch/click
+            setupFirstInteractionListener();
+          } else {
+            // Network or decoding error; fallback to synth
+            playSoftHarpChords();
+            setPlayingState(true);
+          }
+        });
+      }
+    }
+  };
+
+  let interactionSetup = false;
+  const setupFirstInteractionListener = () => {
+    if (interactionSetup) return;
+    interactionSetup = true;
+
+    const onUserInteraction = () => {
+      if (!userManuallyPaused && !isPlaying) {
+        startAudio();
+      }
+      cleanupListeners();
+    };
+
+    const cleanupListeners = () => {
+      ['click', 'touchstart', 'pointerdown', 'keydown'].forEach((evt) => {
+        window.removeEventListener(evt, onUserInteraction);
+      });
+      window.removeEventListener('invitation-opened', onUserInteraction);
+    };
+
+    ['click', 'touchstart', 'pointerdown', 'keydown'].forEach((evt) => {
+      window.addEventListener(evt, onUserInteraction, { once: true, passive: true });
+    });
+    window.addEventListener('invitation-opened', onUserInteraction, { once: true });
+  };
+
+  // 1. Attempt immediate autoplay on load
+  startAudio();
+
+  // 2. Prepare interaction trigger immediately in case browser blocks unprompted autoplay
+  setupFirstInteractionListener();
+
+  // 3. Listen to opening screen unlock
+  window.addEventListener('invitation-opened', () => {
+    if (!userManuallyPaused && !isPlaying) {
+      startAudio();
+    }
+  });
+
   btn?.addEventListener('click', () => {
     if (!isPlaying) {
+      userManuallyPaused = false;
       if (audio) {
         audio.play().then(() => {
           setPlayingState(true);
@@ -128,6 +190,7 @@ import { wedding } from '../data/wedding';
         });
       }
     } else {
+      userManuallyPaused = true;
       if (audio) {
         audio.pause();
       }
