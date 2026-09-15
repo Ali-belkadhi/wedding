@@ -1,0 +1,124 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<section id="details" class="py-24 md:py-36 px-6 bg-champagne-50 relative overflow-hidden border-t border-gold/15">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-16 md:mb-20 details-header">
+      <span data-i18n="details.badge" class="text-[11px] uppercase tracking-widest-2xl text-gold-dark font-medium block mb-3">
+        Célébration
+      </span>
+      <h2 data-i18n="details.title" class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-charcoal tracking-tight mb-4">
+        Détails du Mariage
+      </h2>
+      <p data-i18n="details.sub" class="text-xs md:text-sm font-light text-charcoal/70 max-w-lg mx-auto">
+        Les trois temps forts qui façonneront la magie de notre journée d'union.
+      </p>
+      <div class="w-12 h-px bg-gold/40 mx-auto mt-6"></div>
+    </div>
+
+    <!-- 3 Luxury Event Cards Grid -->
+    <div class="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-10">
+      {wedding.details.map((item, index) => {
+        const cNum = index + 1;
+        return (
+          <div class="detail-card group relative rounded-2xl bg-ivory/80 backdrop-blur-md p-8 sm:p-10 border border-gold/25 hover:border-gold/70 transition-all duration-500 hover:shadow-[0_20px_40px_rgba(197,168,89,0.12)] flex flex-col justify-between">
+            <!-- Card Top Accent -->
+            <div class="absolute -top-3 left-1/2 -translate-x-1/2 px-4 py-1 rounded-full bg-[#1A1816] text-gold-light text-[10px] uppercase tracking-widest font-medium border border-gold/30">
+              <span data-i18n={`details.c${cNum}.step`}>{item.step.fr}</span>
+            </div>
+
+            <div>
+              <!-- Icon Container -->
+              <div class="w-16 h-16 rounded-2xl bg-champagne-100 border border-gold/30 flex items-center justify-center mb-8 mx-auto group-hover:scale-110 group-hover:bg-gold/10 transition-all duration-500 shadow-inner">
+                {item.id === 'ceremony' && (
+                  <svg class="w-7 h-7 text-gold-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M12 3L14.5 8.5L20.5 9.5L16 14L17 20L12 17L7 20L8 14L3.5 9.5L9.5 8.5L12 3Z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                )}
+                {item.id === 'dinner' && (
+                  <svg class="w-7 h-7 text-gold-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" stroke-linecap="round" stroke-linejoin="round"/>
+                    <line x1="6" y1="1" x2="6" y2="4"/>
+                    <line x1="10" y1="1" x2="10" y2="4"/>
+                    <line x1="14" y1="1" x2="14" y2="4"/>
+                  </svg>
+                )}
+                {item.id === 'party' && (
+                  <svg class="w-7 h-7 text-gold-dark" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                    <path d="M5.8 11.3L2 22l10.7-3.79M4 3h.01M22 8h.01M15 2h.01M22 20h.01M12 12l8 8" stroke-linecap="round" stroke-linejoin="round"/>
+                    <path d="m19 5-7 7-4-4 7-7 4 4Z" stroke-linecap="round" stroke-linejoin="round"/>
+                  </svg>
+                )}
+              </div>
+
+              <!-- Time Badge -->
+              <div class="text-center mb-3">
+                <span class="inline-block font-serif text-2xl md:text-3xl text-gold-dark font-light tracking-wide">
+                  {item.time}
+                </span>
+              </div>
+
+              <!-- Title & Subtitle -->
+              <h3 data-i18n={`details.c${cNum}.title`} class="font-serif text-2xl font-light text-charcoal text-center tracking-tight mb-1">
+                {item.title.fr}
+              </h3>
+              <p data-i18n={`details.c${cNum}.sub`} class="text-[11px] uppercase tracking-widest text-gold-dark/80 text-center font-medium mb-5">
+                {item.subtitle.fr}
+              </p>
+
+              <div class="w-10 h-px bg-gold/30 mx-auto mb-5"></div>
+
+              <!-- Description -->
+              <p data-i18n={`details.c${cNum}.desc`} class="text-xs sm:text-sm text-charcoal/75 text-center font-light leading-relaxed">
+                {item.description.fr}
+              </p>
+            </div>
+
+            <!-- Location Badge at bottom -->
+            <div class="mt-8 pt-6 border-t border-gold/15 flex items-center justify-center gap-2 text-charcoal/70 text-xs font-light">
+              <svg class="w-4 h-4 text-gold-dark flex-shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+              </svg>
+              <span data-i18n={`details.c${cNum}.loc`} class="truncate">{item.location.fr}</span>
+            </div>
+          </div>
+        );
+      })}
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from('#details .details-header', {
+    scrollTrigger: {
+      trigger: '#details',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    },
+    y: 30,
+    opacity: 0,
+    duration: 1,
+    ease: 'power3.out'
+  });
+
+  gsap.from('#details .detail-card', {
+    scrollTrigger: {
+      trigger: '#details',
+      start: 'top 75%',
+      toggleActions: 'play none none none'
+    },
+    y: 40,
+    opacity: 0,
+    duration: 1,
+    stagger: 0.2,
+    ease: 'power3.out'
+  });
+</script>

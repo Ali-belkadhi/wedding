@@ -1,0 +1,117 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<section id="dress-code" class="py-24 md:py-36 px-6 bg-champagne-50 relative overflow-hidden border-t border-gold/15">
+  <div class="max-w-5xl mx-auto">
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-16 md:mb-20 dress-header">
+      <span data-i18n="dressCode.badge" class="text-[11px] uppercase tracking-widest-2xl text-gold-dark font-medium block mb-3">
+        {wedding.dressCode.badge.fr}
+      </span>
+      <h2 data-i18n="dressCode.title" class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-charcoal tracking-tight mb-4">
+        {wedding.dressCode.title.fr}
+      </h2>
+      <p data-i18n="dressCode.sub" class="text-xs md:text-sm font-light text-charcoal/70">
+        {wedding.dressCode.subtitle.fr}
+      </p>
+      <div class="w-12 h-px bg-gold/40 mx-auto mt-6"></div>
+    </div>
+
+    <!-- Content Box -->
+    <div class="max-w-3xl mx-auto rounded-2xl bg-ivory/90 backdrop-blur-md p-8 sm:p-12 border border-gold/30 shadow-md text-center dress-box">
+      <!-- Style Badge -->
+      <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-champagne-100 border border-gold/30 text-gold-dark text-xs uppercase tracking-widest-xl font-medium mb-6">
+        <svg class="w-3.5 h-3.5 text-gold-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M5 3v4M3 5h4M6 17v4m-2-2h4m5-16l2.286 6.857L21 12l-5.714 2.143L13 21l-2.286-6.857L5 12l5.714-2.143L13 3z"/>
+        </svg>
+        <span data-i18n="dressCode.tag">{wedding.dressCode.tag.fr}</span>
+      </div>
+
+      <p data-i18n="dressCode.desc" class="text-charcoal/80 font-sans text-sm sm:text-base leading-relaxed font-light mb-10 max-w-xl mx-auto">
+        {wedding.dressCode.description.fr}
+      </p>
+
+      <!-- Color Palette Circles -->
+      <div class="mb-10">
+        <span data-i18n="dressCode.paletteTitle" class="text-[10px] uppercase tracking-widest-2xl text-charcoal/60 font-semibold block mb-6">
+          {wedding.dressCode.paletteTitle.fr}
+        </span>
+
+        <div class="flex flex-wrap items-center justify-center gap-6 sm:gap-8">
+          {wedding.dressCode.colors.map((color, index) => {
+            const cNum = index + 1;
+            return (
+              <div class="flex flex-col items-center group">
+                <!-- Circle -->
+                <div
+                  class="w-14 h-14 sm:w-16 sm:h-16 rounded-full shadow-md group-hover:scale-110 group-hover:shadow-lg transition-all duration-300 relative flex items-center justify-center cursor-pointer"
+                  style={`background-color: ${color.hex}; border: 1.5px solid ${color.border || 'rgba(197,168,89,0.4)'};`}
+                  title={`${color.name.fr} (${color.hex})`}
+                >
+                  <!-- Subtle Inner Ring -->
+                  <div class="w-11 h-11 sm:w-12 sm:h-12 rounded-full border border-white/20 pointer-events-none"></div>
+                </div>
+
+                <!-- Label -->
+                <span data-i18n={`dressCode.c${cNum}`} class="text-[11px] font-serif tracking-wide text-charcoal mt-3 block">
+                  {color.name.fr}
+                </span>
+                <span class="text-[9px] uppercase tracking-widest text-charcoal/50">
+                  {color.hex}
+                </span>
+              </div>
+            );
+          })}
+        </div>
+      </div>
+
+      <!-- Etiquette Notes -->
+      <div class="pt-8 border-t border-gold/20 max-w-lg mx-auto text-left rtl:text-right space-y-2.5">
+        <div class="flex items-start gap-3 text-xs text-charcoal/70 font-light">
+          <span class="w-1.5 h-1.5 rounded-full bg-gold-dark mt-1.5 flex-shrink-0"></span>
+          <span data-i18n="dressCode.note1">{wedding.dressCode.notes[0].fr}</span>
+        </div>
+        <div class="flex items-start gap-3 text-xs text-charcoal/70 font-light">
+          <span class="w-1.5 h-1.5 rounded-full bg-gold-dark mt-1.5 flex-shrink-0"></span>
+          <span data-i18n="dressCode.note2">{wedding.dressCode.notes[1].fr}</span>
+        </div>
+        <div class="flex items-start gap-3 text-xs text-charcoal/70 font-light">
+          <span class="w-1.5 h-1.5 rounded-full bg-gold-dark mt-1.5 flex-shrink-0"></span>
+          <span data-i18n="dressCode.note3">{wedding.dressCode.notes[2].fr}</span>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from('#dress-code .dress-header', {
+    scrollTrigger: {
+      trigger: '#dress-code',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    },
+    y: 30,
+    opacity: 0,
+    duration: 1,
+    ease: 'power3.out'
+  });
+
+  gsap.from('#dress-code .dress-box', {
+    scrollTrigger: {
+      trigger: '#dress-code',
+      start: 'top 75%',
+      toggleActions: 'play none none none'
+    },
+    y: 40,
+    opacity: 0,
+    duration: 1.1,
+    ease: 'power3.out'
+  });
+</script>

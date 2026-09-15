@@ -1,0 +1,139 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<section id="story" class="py-24 md:py-36 px-6 bg-champagne-50 relative overflow-hidden border-y border-gold/15">
+  <div class="max-w-6xl mx-auto">
+    <!-- Header Section -->
+    <div class="text-center max-w-xl mx-auto mb-16 md:mb-24 story-reveal">
+      <span data-i18n="story.badge" class="text-[11px] uppercase tracking-widest-2xl text-gold-dark font-medium block mb-3">
+        {wedding.story.badge.fr}
+      </span>
+      <h2 data-i18n="story.title" class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-charcoal tracking-tight mb-4">
+        {wedding.story.title.fr}
+      </h2>
+      <p data-i18n="story.subtitle" class="text-xs md:text-sm font-serif italic text-charcoal/70">
+        {wedding.story.subtitle.fr}
+      </p>
+      <div class="w-12 h-px bg-gold/40 mx-auto mt-6"></div>
+    </div>
+
+    <!-- Editorial Two-Column Layout (Desktop) / Single Column (Mobile) -->
+    <div class="grid grid-cols-1 lg:grid-cols-12 gap-12 lg:gap-16 items-center">
+      <!-- Left Column: Couple Photo with Luxury Editorial Frame -->
+      <div class="lg:col-span-5 story-image-wrap relative">
+        <div class="relative mx-auto max-w-md lg:max-w-none">
+          <!-- Offset Gold Border Accent -->
+          <div class="absolute -top-3 -left-3 md:-top-5 md:-left-5 w-full h-full border border-gold/40 rounded-sm pointer-events-none"></div>
+          
+          <!-- Image Container -->
+          <div class="relative overflow-hidden rounded-sm shadow-[0_20px_40px_rgba(0,0,0,0.08)] aspect-[3/4] bg-champagne-100">
+            <img
+              id="story-img"
+              src={wedding.story.image}
+              alt="Meriem & Refki"
+              class="w-full h-full object-cover object-center transform hover:scale-105 transition-transform duration-700 ease-out"
+              loading="lazy"
+            />
+          </div>
+
+          <!-- Small Floating Editorial Tag -->
+          <div class="absolute -bottom-4 right-4 bg-ivory/95 backdrop-blur-md px-5 py-3 border border-gold/30 shadow-lg rounded-sm text-center">
+            <span data-i18n="story.tagYear" class="font-serif text-lg font-light text-charcoal block leading-none">
+              Depuis 2021
+            </span>
+            <span data-i18n="story.tagForever" class="text-[9px] uppercase tracking-widest text-gold-dark mt-1 block">
+              Pour l'Éternité
+            </span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Right Column: Narrative Text -->
+      <div class="lg:col-span-7 flex flex-col justify-center space-y-6 story-content">
+        <div class="border-l-2 rtl:border-l-0 rtl:border-r-2 border-gold/50 pl-6 rtl:pl-0 rtl:pr-6 py-2">
+          <p data-i18n="story.quote" class="font-serif italic text-lg sm:text-xl text-charcoal/90 leading-relaxed">
+            {wedding.story.quote.fr}
+          </p>
+        </div>
+
+        <div class="space-y-4 text-charcoal/80 font-sans text-sm sm:text-base leading-relaxed font-light">
+          <p data-i18n="story.p1">{wedding.story.paragraphs[0].fr}</p>
+          <p data-i18n="story.p2">{wedding.story.paragraphs[1].fr}</p>
+          <p data-i18n="story.p3">{wedding.story.paragraphs[2].fr}</p>
+        </div>
+
+        <!-- Milestones / Stats Row -->
+        <div class="pt-8 border-t border-gold/20 grid grid-cols-3 gap-4 text-center">
+          <div class="p-3">
+            <span data-i18n="story.stat1Val" class="font-serif text-2xl sm:text-3xl text-gold-dark font-light block">
+              {wedding.story.stats[0].value.fr}
+            </span>
+            <span data-i18n="story.stat1Lbl" class="text-[10px] sm:text-[11px] uppercase tracking-wider text-charcoal/60 font-medium mt-1 block">
+              {wedding.story.stats[0].label.fr}
+            </span>
+          </div>
+          <div class="p-3">
+            <span data-i18n="story.stat2Val" class="font-serif text-2xl sm:text-3xl text-gold-dark font-light block">
+              {wedding.story.stats[1].value.fr}
+            </span>
+            <span data-i18n="story.stat2Lbl" class="text-[10px] sm:text-[11px] uppercase tracking-wider text-charcoal/60 font-medium mt-1 block">
+              {wedding.story.stats[1].label.fr}
+            </span>
+          </div>
+          <div class="p-3">
+            <span data-i18n="story.stat3Val" class="font-serif text-2xl sm:text-3xl text-gold-dark font-light block">
+              {wedding.story.stats[2].value.fr}
+            </span>
+            <span data-i18n="story.stat3Lbl" class="text-[10px] sm:text-[11px] uppercase tracking-wider text-charcoal/60 font-medium mt-1 block">
+              {wedding.story.stats[2].label.fr}
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from('.story-reveal', {
+    scrollTrigger: {
+      trigger: '#story',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    },
+    y: 30,
+    opacity: 0,
+    duration: 1,
+    ease: 'power3.out'
+  });
+
+  gsap.from('.story-image-wrap', {
+    scrollTrigger: {
+      trigger: '.story-image-wrap',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    },
+    x: -40,
+    opacity: 0,
+    duration: 1.2,
+    ease: 'power3.out'
+  });
+
+  gsap.from('.story-content', {
+    scrollTrigger: {
+      trigger: '.story-content',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    },
+    x: 40,
+    opacity: 0,
+    duration: 1.2,
+    ease: 'power3.out'
+  });
+</script>

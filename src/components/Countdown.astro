@@ -1,0 +1,134 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<section id="countdown" class="py-20 md:py-28 px-6 bg-ivory relative overflow-hidden">
+  <div class="max-w-4xl mx-auto text-center relative z-10">
+    <!-- Section Heading -->
+    <div class="countdown-reveal mb-12">
+      <span data-i18n="countdown.badge" class="text-[11px] uppercase tracking-widest-2xl text-gold-dark font-medium block mb-2">
+        Le Compte à Rebours
+      </span>
+      <h2 data-i18n="countdown.title" class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-charcoal tracking-tight">
+        Chaque Seconde Nous Rapproche
+      </h2>
+      <p data-i18n="countdown.sub" class="text-xs md:text-sm text-charcoal/70 font-light mt-2">
+        Jusqu'au sacre de notre amour le {wedding.displayDate.fr}
+      </p>
+      <div class="w-12 h-px bg-gold/40 mx-auto mt-5"></div>
+    </div>
+
+    <!-- Countdown Timer Grid (Single row 4-column layout on all screens) -->
+    <div
+      id="countdown-timer"
+      class="countdown-reveal grid grid-cols-4 gap-2 sm:gap-6 max-w-2xl mx-auto"
+      data-target-date={wedding.date}
+    >
+      <!-- Days Card -->
+      <div class="glass-card-champagne rounded-xl py-4 px-1 sm:p-8 flex flex-col items-center justify-center relative group hover:border-gold/60 transition-all duration-300 shadow-sm">
+        <div class="absolute -top-1.5 w-4 sm:w-6 h-px bg-gold/60"></div>
+        <span id="days" class="font-serif text-2xl sm:text-5xl md:text-6xl font-light text-charcoal tracking-tight tabular-nums">
+          00
+        </span>
+        <span data-i18n="countdown.days" class="text-[9px] sm:text-[11px] uppercase tracking-wider sm:tracking-widest-xl text-gold-dark font-medium mt-1 sm:mt-2">
+          Jours
+        </span>
+      </div>
+
+      <!-- Hours Card -->
+      <div class="glass-card-champagne rounded-xl py-4 px-1 sm:p-8 flex flex-col items-center justify-center relative group hover:border-gold/60 transition-all duration-300 shadow-sm">
+        <div class="absolute -top-1.5 w-4 sm:w-6 h-px bg-gold/60"></div>
+        <span id="hours" class="font-serif text-2xl sm:text-5xl md:text-6xl font-light text-charcoal tracking-tight tabular-nums">
+          00
+        </span>
+        <span data-i18n="countdown.hours" class="text-[9px] sm:text-[11px] uppercase tracking-wider sm:tracking-widest-xl text-gold-dark font-medium mt-1 sm:mt-2">
+          Heures
+        </span>
+      </div>
+
+      <!-- Minutes Card -->
+      <div class="glass-card-champagne rounded-xl py-4 px-1 sm:p-8 flex flex-col items-center justify-center relative group hover:border-gold/60 transition-all duration-300 shadow-sm">
+        <div class="absolute -top-1.5 w-4 sm:w-6 h-px bg-gold/60"></div>
+        <span id="minutes" class="font-serif text-2xl sm:text-5xl md:text-6xl font-light text-charcoal tracking-tight tabular-nums">
+          00
+        </span>
+        <span data-i18n="countdown.minutes" class="text-[9px] sm:text-[11px] uppercase tracking-wider sm:tracking-widest-xl text-gold-dark font-medium mt-1 sm:mt-2">
+          Minutes
+        </span>
+      </div>
+
+      <!-- Seconds Card -->
+      <div class="glass-card-champagne rounded-xl py-4 px-1 sm:p-8 flex flex-col items-center justify-center relative group hover:border-gold/60 transition-all duration-300 shadow-sm">
+        <div class="absolute -top-1.5 w-4 sm:w-6 h-px bg-gold/60"></div>
+        <span id="seconds" class="font-serif text-2xl sm:text-5xl md:text-6xl font-light text-gold-dark tracking-tight tabular-nums">
+          00
+        </span>
+        <span data-i18n="countdown.seconds" class="text-[9px] sm:text-[11px] uppercase tracking-wider sm:tracking-widest-xl text-gold-dark font-medium mt-1 sm:mt-2">
+          Secondes
+        </span>
+      </div>
+    </div>
+
+    <!-- Romantic Subtext -->
+    <p class="countdown-reveal mt-10 text-xs tracking-widest text-charcoal/60 uppercase font-light">
+      <span data-i18n="hero.city">{wedding.city.fr}</span> • <span data-i18n="location.venueName">{wedding.venue.name.fr}</span>
+    </p>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from('#countdown .countdown-reveal', {
+    scrollTrigger: {
+      trigger: '#countdown',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    },
+    y: 30,
+    opacity: 0,
+    duration: 1,
+    stagger: 0.15,
+    ease: 'power3.out'
+  });
+
+  const timerEl = document.getElementById('countdown-timer');
+  const daysEl = document.getElementById('days');
+  const hoursEl = document.getElementById('hours');
+  const minutesEl = document.getElementById('minutes');
+  const secondsEl = document.getElementById('seconds');
+
+  if (timerEl && daysEl && hoursEl && minutesEl && secondsEl) {
+    const targetDateStr = timerEl.getAttribute('data-target-date') || '2027-06-12T18:00:00';
+    const targetTime = new Date(targetDateStr).getTime();
+
+    const updateCountdown = () => {
+      const now = new Date().getTime();
+      const distance = targetTime - now;
+
+      if (distance < 0) {
+        daysEl.textContent = '00';
+        hoursEl.textContent = '00';
+        minutesEl.textContent = '00';
+        secondsEl.textContent = '00';
+        return;
+      }
+
+      const days = Math.floor(distance / (1000 * 60 * 60 * 24));
+      const hours = Math.floor((distance % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
+      const minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+      const seconds = Math.floor((distance % (1000 * 60)) / 1000);
+
+      daysEl.textContent = String(days).padStart(2, '0');
+      hoursEl.textContent = String(hours).padStart(2, '0');
+      minutesEl.textContent = String(minutes).padStart(2, '0');
+      secondsEl.textContent = String(seconds).padStart(2, '0');
+    };
+
+    updateCountdown();
+    setInterval(updateCountdown, 1000);
+  }
+</script>

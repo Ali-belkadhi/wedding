@@ -1,0 +1,197 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<header id="main-header" class="fixed top-3 sm:top-6 left-0 right-0 z-40 px-3 sm:px-8 transition-all duration-500">
+  <div class="max-w-6xl mx-auto flex items-center justify-between py-2 px-3 sm:py-2.5 sm:px-8 rounded-full bg-ivory/90 md:bg-ivory/80 backdrop-blur-md border border-gold/30 shadow-[0_8px_30px_rgb(0,0,0,0.08)]">
+    <!-- Brand / Monogram -->
+    <a href="#hero" class="group flex items-center gap-2" aria-label="Retour en haut">
+      <span class="w-8 h-8 rounded-full bg-[#1A1816] text-gold-light border border-gold/40 flex items-center justify-center font-serif text-sm font-medium group-hover:scale-105 transition-transform duration-300">
+        <span data-i18n="hero.initials">{wedding.initials.fr}</span>
+      </span>
+      <span class="font-serif text-base sm:text-lg tracking-wider text-charcoal-900 truncate max-w-[120px] sm:max-w-none">
+        <span data-i18n="hero.bride">{wedding.bride.fr}</span> &amp; <span data-i18n="hero.groom">{wedding.groom.fr}</span>
+      </span>
+    </a>
+
+    <!-- Desktop Navigation Links -->
+    <nav class="hidden lg:flex items-center gap-6 text-[12px] uppercase tracking-widest-xl text-charcoal/80 font-medium">
+      <a href="#story" data-i18n="nav.story" class="hover:text-gold-dark transition-colors duration-300">Histoire</a>
+      <a href="#details" data-i18n="nav.details" class="hover:text-gold-dark transition-colors duration-300">Détails</a>
+      <a href="#timeline" data-i18n="nav.timeline" class="hover:text-gold-dark transition-colors duration-300">Programme</a>
+      <a href="#gallery" data-i18n="nav.gallery" class="hover:text-gold-dark transition-colors duration-300">Galerie</a>
+      <a href="#location" data-i18n="nav.location" class="hover:text-gold-dark transition-colors duration-300">Lieu</a>
+      <a href="#dress-code" data-i18n="nav.dressCode" class="hover:text-gold-dark transition-colors duration-300">Dress Code</a>
+    </nav>
+
+    <!-- Right Side: Language Switcher + RSVP Button + Mobile Hamburger -->
+    <div class="flex items-center gap-2 sm:gap-3">
+      <!-- Language Switcher Pill (FR / AR) -->
+      <div class="inline-flex items-center rounded-full p-0.5 bg-champagne-100 border border-gold/35 shadow-xs" role="group" aria-label="Choisir la langue">
+        <button
+          type="button"
+          data-lang-switch="fr"
+          class="px-2 sm:px-2.5 py-1 text-[10px] sm:text-[11px] uppercase tracking-wider rounded-full font-medium transition-all duration-300 bg-gold text-white"
+          aria-label="Version Française"
+        >
+          FR
+        </button>
+        <button
+          type="button"
+          data-lang-switch="ar"
+          class="px-2 sm:px-2.5 py-1 text-[10px] sm:text-[11px] rounded-full font-medium transition-all duration-300 text-charcoal/70 hover:text-gold font-serif"
+          aria-label="النسخة العربية"
+        >
+          العربية
+        </button>
+      </div>
+
+      <!-- Desktop RSVP Button -->
+      <a
+        href="#rsvp"
+        data-i18n="nav.rsvp"
+        class="hidden sm:inline-flex items-center justify-center px-4 md:px-5 py-2 text-[11px] uppercase tracking-widest font-medium rounded-full bg-charcoal text-ivory border border-gold/40 hover:bg-gold-dark hover:border-gold hover:text-white transition-all duration-300 shadow-sm"
+      >
+        Confirmer RSVP
+      </a>
+
+      <!-- Mobile Menu Toggle Button (Touch Friendly 40x40) -->
+      <button
+        id="mobile-menu-btn"
+        type="button"
+        class="lg:hidden w-10 h-10 flex flex-col items-center justify-center gap-1.5 rounded-full border border-gold/30 hover:bg-gold/10 transition-colors focus:outline-none"
+        aria-label="Ouvrir le menu de navigation"
+        aria-expanded="false"
+      >
+        <span class="hamburger-line-1 w-4 h-[1.5px] bg-charcoal transition-all duration-300"></span>
+        <span class="hamburger-line-2 w-4 h-[1.5px] bg-charcoal transition-all duration-300"></span>
+      </button>
+    </div>
+  </div>
+</header>
+
+<!-- Mobile Navigation Drawer (Full Height, Scrollable, with Close Button) -->
+<div
+  id="mobile-drawer"
+  class="fixed inset-0 z-50 bg-charcoal/95 backdrop-blur-2xl opacity-0 pointer-events-none transition-all duration-400 flex flex-col justify-between items-center py-6 px-6 overflow-y-auto"
+  aria-hidden="true"
+>
+  <!-- Drawer Header with Close Button -->
+  <div class="w-full flex items-center justify-between pb-4 border-b border-gold/15">
+    <div class="flex items-center gap-2">
+      <span class="w-7 h-7 rounded-full bg-gold/20 text-gold-light border border-gold/40 flex items-center justify-center font-serif text-xs">
+        <span data-i18n="hero.initials">{wedding.initials.fr}</span>
+      </span>
+      <span class="font-serif text-sm text-ivory">
+        <span data-i18n="hero.bride">{wedding.bride.fr}</span> &amp; <span data-i18n="hero.groom">{wedding.groom.fr}</span>
+      </span>
+    </div>
+
+    <!-- Explicit Close Button -->
+    <button
+      id="drawer-close-btn"
+      type="button"
+      class="w-10 h-10 rounded-full border border-gold/30 text-ivory hover:text-gold flex items-center justify-center transition-colors"
+      aria-label="Fermer le menu"
+    >
+      <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+  </div>
+
+  <!-- Mobile Language Switcher -->
+  <div class="my-4 p-1 rounded-full bg-[#201D1A] border border-gold/40 flex items-center gap-1">
+    <button
+      type="button"
+      data-lang-switch="fr"
+      class="px-5 py-2 text-xs uppercase tracking-wider rounded-full font-medium transition-all duration-300 bg-gold text-white"
+    >
+      Français
+    </button>
+    <button
+      type="button"
+      data-lang-switch="ar"
+      class="px-5 py-2 text-xs rounded-full font-medium transition-all duration-300 text-champagne hover:text-gold font-serif"
+    >
+      العربية
+    </button>
+  </div>
+
+  <!-- Links List -->
+  <nav class="flex flex-col items-center gap-4 text-lg font-serif tracking-widest text-champagne/90 my-auto py-2">
+    <a href="#hero" data-i18n="nav.home" class="mobile-nav-link hover:text-gold transition-colors py-1">Accueil</a>
+    <a href="#story" data-i18n="nav.story" class="mobile-nav-link hover:text-gold transition-colors py-1">Notre Histoire</a>
+    <a href="#details" data-i18n="nav.details" class="mobile-nav-link hover:text-gold transition-colors py-1">Détails du Mariage</a>
+    <a href="#timeline" data-i18n="nav.timeline" class="mobile-nav-link hover:text-gold transition-colors py-1">Programme du Jour</a>
+    <a href="#gallery" data-i18n="nav.gallery" class="mobile-nav-link hover:text-gold transition-colors py-1">Galerie Photos</a>
+    <a href="#location" data-i18n="nav.location" class="mobile-nav-link hover:text-gold transition-colors py-1">Lieu &amp; Accès</a>
+    <a href="#dress-code" data-i18n="nav.dressCode" class="mobile-nav-link hover:text-gold transition-colors py-1">Code Vestimentaire</a>
+  </nav>
+
+  <!-- Bottom RSVP CTA in Drawer -->
+  <div class="w-full max-w-xs pt-4 border-t border-gold/15 text-center">
+    <a
+      href="#rsvp"
+      data-i18n="nav.rsvp"
+      class="mobile-nav-link block w-full py-3 text-xs uppercase tracking-widest font-sans font-medium rounded-full bg-gold-dark text-white border border-gold shadow-lg"
+    >
+      Répondre (RSVP)
+    </a>
+  </div>
+</div>
+
+<script>
+  import '../scripts/i18n';
+
+  const header = document.getElementById('main-header');
+  const menuBtn = document.getElementById('mobile-menu-btn');
+  const closeBtn = document.getElementById('drawer-close-btn');
+  const drawer = document.getElementById('mobile-drawer');
+  const navLinks = document.querySelectorAll('.mobile-nav-link');
+  let isOpen = false;
+
+  const openDrawer = () => {
+    isOpen = true;
+    if (drawer && menuBtn) {
+      drawer.classList.remove('opacity-0', 'pointer-events-none');
+      drawer.classList.add('opacity-100', 'pointer-events-auto');
+      menuBtn.setAttribute('aria-expanded', 'true');
+      document.body.classList.add('overflow-hidden');
+    }
+  };
+
+  const closeDrawer = () => {
+    isOpen = false;
+    if (drawer && menuBtn) {
+      drawer.classList.add('opacity-0', 'pointer-events-none');
+      drawer.classList.remove('opacity-100', 'pointer-events-auto');
+      menuBtn.setAttribute('aria-expanded', 'false');
+      document.body.classList.remove('overflow-hidden');
+    }
+  };
+
+  menuBtn?.addEventListener('click', () => {
+    if (isOpen) closeDrawer();
+    else openDrawer();
+  });
+
+  closeBtn?.addEventListener('click', closeDrawer);
+
+  navLinks.forEach((link) => {
+    link.addEventListener('click', () => {
+      closeDrawer();
+    });
+  });
+
+  // Header scroll shadow effect
+  window.addEventListener('scroll', () => {
+    if (header) {
+      if (window.scrollY > 40) {
+        header.classList.add('top-2', 'sm:top-3');
+      } else {
+        header.classList.remove('top-2', 'sm:top-3');
+      }
+    }
+  });
+</script>

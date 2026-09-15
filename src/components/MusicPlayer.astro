@@ -1,0 +1,154 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<div id="music-player-container" class="fixed bottom-4 right-4 sm:bottom-6 sm:right-6 rtl:right-auto rtl:left-4 sm:rtl:left-6 z-40">
+  <!-- Hidden Audio Element -->
+  <audio id="wedding-audio" loop preload="none">
+    <source src={wedding.music.src} type="audio/mpeg" />
+  </audio>
+
+  <!-- Player Floating Pill / Disc -->
+  <div class="relative group flex items-center">
+    <!-- Song Info Tooltip on hover -->
+    <div class="absolute right-full rtl:right-auto rtl:left-full mr-3 rtl:mr-0 rtl:ml-3 hidden sm:flex items-center pointer-events-none opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+      <div class="px-3.5 py-1.5 rounded-full bg-charcoal/90 backdrop-blur-md text-ivory text-[10px] tracking-widest whitespace-nowrap border border-gold/30 shadow-lg">
+        <span id="music-status-text" data-i18n="music.tooltip" class="text-gold-light font-medium">Musique</span> : <span data-i18n="music.title">{wedding.music.title.fr}</span>
+      </div>
+    </div>
+
+    <!-- Toggle Button -->
+    <button
+      id="music-toggle-btn"
+      type="button"
+      class="relative w-11 h-11 sm:w-12 sm:h-12 rounded-full bg-[#1A1816] text-ivory border border-gold/40 shadow-xl flex items-center justify-center hover:scale-105 hover:border-gold transition-all duration-300 focus:outline-none focus:ring-2 focus:ring-gold"
+      aria-label="Lire ou mettre en pause la musique d'ambiance"
+      aria-pressed="false"
+    >
+      <!-- Subtle rotating border when playing -->
+      <div id="music-ring" class="absolute inset-0 rounded-full border border-gold/40 opacity-0 pointer-events-none transition-opacity"></div>
+
+      <!-- Play Icon (Initial) -->
+      <svg id="play-icon" class="w-5 h-5 text-gold-light ml-0.5 rtl:ml-0 rtl:mr-0.5" fill="currentColor" viewBox="0 0 24 24">
+        <path d="M8 5v14l11-7z" />
+      </svg>
+
+      <!-- Animated Sound Bars (When Playing) -->
+      <div id="sound-bars" class="hidden items-end gap-0.5 h-4">
+        <span class="w-1 bg-gold rounded-full h-2.5 animate-[pulse_0.8s_ease-in-out_infinite]"></span>
+        <span class="w-1 bg-gold rounded-full h-4 animate-[pulse_0.6s_ease-in-out_infinite_0.2s]"></span>
+        <span class="w-1 bg-gold rounded-full h-3 animate-[pulse_1s_ease-in-out_infinite_0.4s]"></span>
+      </div>
+    </button>
+  </div>
+</div>
+
+<script>
+  import { i18nDict, type Lang } from '../data/i18n';
+
+  const audio = document.getElementById('wedding-audio') as HTMLAudioElement | null;
+  const btn = document.getElementById('music-toggle-btn');
+  const playIcon = document.getElementById('play-icon');
+  const soundBars = document.getElementById('sound-bars');
+  const musicRing = document.getElementById('music-ring');
+  const statusText = document.getElementById('music-status-text');
+
+  let isPlaying = false;
+
+  // Web Audio Synthesizer fallback in case external audio link fails
+  let audioContext: AudioContext | null = null;
+  let synthGain: GainNode | null = null;
+  let synthInterval: number | null = null;
+
+  const playSoftHarpChords = () => {
+    try {
+      const AudioCtx = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext;
+      audioContext = new AudioCtx();
+      synthGain = audioContext.createGain();
+      synthGain.gain.setValueAtTime(0.08, audioContext.currentTime);
+      synthGain.connect(audioContext.destination);
+
+      const notes = [261.63, 329.63, 392.00, 523.25, 659.25];
+      let noteIdx = 0;
+
+      const triggerNote = () => {
+        if (!audioContext || !synthGain || !isPlaying) return;
+        const osc = audioContext.createOscillator();
+        const noteGain = audioContext.createGain();
+        osc.type = 'sine';
+        osc.frequency.setValueAtTime(notes[noteIdx % notes.length], audioContext.currentTime);
+        noteGain.gain.setValueAtTime(0.05, audioContext.currentTime);
+        noteGain.gain.exponentialRampToValueAtTime(0.0001, audioContext.currentTime + 2.5);
+        osc.connect(noteGain);
+        noteGain.connect(synthGain);
+        osc.start();
+        osc.stop(audioContext.currentTime + 2.5);
+        noteIdx++;
+      };
+
+      triggerNote();
+      synthInterval = window.setInterval(triggerNote, 1400);
+    } catch {
+      // Fallback unavailable
+    }
+  };
+
+  const getLang = (): Lang => (document.documentElement.lang as Lang) || 'fr';
+
+  const setPlayingState = (playing: boolean) => {
+    isPlaying = playing;
+    btn?.setAttribute('aria-pressed', playing ? 'true' : 'false');
+    const lang = getLang();
+
+    if (playing) {
+      playIcon?.classList.add('hidden');
+      soundBars?.classList.remove('hidden');
+      soundBars?.classList.add('flex');
+      musicRing?.classList.remove('opacity-0');
+      musicRing?.classList.add('animate-spin-slow', 'opacity-100');
+      if (statusText) statusText.textContent = i18nDict['music.playing'][lang];
+    } else {
+      playIcon?.classList.remove('hidden');
+      soundBars?.classList.add('hidden');
+      soundBars?.classList.remove('flex');
+      musicRing?.classList.add('opacity-0');
+      musicRing?.classList.remove('animate-spin-slow', 'opacity-100');
+      if (statusText) statusText.textContent = i18nDict['music.tooltip'][lang];
+    }
+  };
+
+  btn?.addEventListener('click', () => {
+    if (!isPlaying) {
+      if (audio) {
+        audio.play().then(() => {
+          setPlayingState(true);
+        }).catch(() => {
+          playSoftHarpChords();
+          setPlayingState(true);
+        });
+      }
+    } else {
+      if (audio) {
+        audio.pause();
+      }
+      if (audioContext) {
+        audioContext.close();
+        audioContext = null;
+      }
+      if (synthInterval) {
+        clearInterval(synthInterval);
+        synthInterval = null;
+      }
+      setPlayingState(false);
+    }
+  });
+
+  audio?.addEventListener('ended', () => setPlayingState(false));
+  audio?.addEventListener('pause', () => {
+    if (!audioContext) setPlayingState(false);
+  });
+
+  window.addEventListener('wedding-lang-changed', () => {
+    setPlayingState(isPlaying);
+  });
+</script>

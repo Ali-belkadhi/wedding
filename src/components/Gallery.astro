@@ -1,0 +1,216 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<section id="gallery" class="py-24 md:py-36 px-4 sm:px-6 bg-champagne-50 relative overflow-hidden border-y border-gold/15">
+  <div class="max-w-7xl mx-auto">
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-20 gallery-header">
+      <span data-i18n="gallery.badge" class="text-[11px] uppercase tracking-widest-2xl text-gold-dark font-medium block mb-3">
+        Mémoires Précieuses
+      </span>
+      <h2 data-i18n="gallery.title" class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-charcoal tracking-tight mb-4">
+        Galerie de Nos Instants
+      </h2>
+      <p data-i18n="gallery.sub" class="text-xs md:text-sm font-light text-charcoal/70">
+        Cliquez sur un cliché pour l'admirer en plein écran.
+      </p>
+      <div class="w-12 h-px bg-gold/40 mx-auto mt-6"></div>
+    </div>
+
+    <!-- Swiper Carousel Container -->
+    <div class="relative px-2 sm:px-8">
+      <div class="swiper wedding-swiper overflow-hidden rounded-2xl">
+        <div class="swiper-wrapper py-4">
+          {wedding.gallery.map((photo, index) => (
+            <div class="swiper-slide cursor-pointer">
+              <div
+                class="gallery-item group relative aspect-[4/5] rounded-xl overflow-hidden shadow-[0_12px_30px_rgba(0,0,0,0.06)] border border-gold/20 bg-ivory"
+                data-index={index}
+                data-src={photo.src}
+                data-alt-fr={photo.alt.fr}
+                data-alt-ar={photo.alt.ar}
+                data-caption-fr={photo.caption.fr}
+                data-caption-ar={photo.caption.ar}
+              >
+                <img
+                  src={photo.thumb}
+                  alt={photo.alt.fr}
+                  class="w-full h-full object-cover object-center group-hover:scale-110 transition-transform duration-700 ease-out"
+                  loading="lazy"
+                />
+
+                <!-- Hover Gradient & Caption Overlay -->
+                <div class="absolute inset-0 bg-gradient-to-t from-charcoal/80 via-charcoal/20 to-transparent opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex flex-col justify-end p-6 text-ivory">
+                  <span class="text-[10px] uppercase tracking-widest-xl text-gold-light font-medium block mb-1">
+                    <span data-i18n="gallery.instant">Instant</span> #{index + 1}
+                  </span>
+                  <p class="font-serif italic text-base sm:text-lg text-ivory leading-snug gallery-caption-text">
+                    {photo.caption.fr}
+                  </p>
+                  <div class="mt-3 flex items-center gap-2 text-[10px] text-champagne/80 uppercase tracking-widest">
+                    <svg class="w-3.5 h-3.5 text-gold" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"/>
+                      <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M2.458 12C3.732 7.943 7.523 5 12 5c4.478 0 8.268 2.943 9.542 7-1.274 4.057-5.064 7-9.542 7-4.477 0-8.268-2.943-9.542-7z"/>
+                    </svg>
+                    <span data-i18n="gallery.zoom">Agrandir</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Custom Navigation & Pagination -->
+        <div class="swiper-pagination mt-6"></div>
+        <div class="swiper-button-prev hidden md:flex !left-0 rtl:!left-auto rtl:!right-0"></div>
+        <div class="swiper-button-next hidden md:flex !right-0 rtl:!right-auto rtl:!left-0"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Full-Screen Lightbox Modal -->
+  <div
+    id="lightbox-modal"
+    class="fixed inset-0 z-50 bg-charcoal/95 backdrop-blur-md opacity-0 pointer-events-none transition-opacity duration-400 flex items-center justify-center p-4"
+    role="dialog"
+    aria-modal="true"
+    aria-label="Aperçu photo grand écran"
+  >
+    <!-- Close Button -->
+    <button
+      id="lightbox-close"
+      type="button"
+      class="absolute top-6 right-6 rtl:right-auto rtl:left-6 w-11 h-11 rounded-full border border-gold/40 bg-[#1A1816]/80 text-ivory hover:text-gold hover:border-gold flex items-center justify-center transition-colors duration-300 z-10 focus:outline-none"
+      aria-label="Fermer l'aperçu"
+    >
+      <svg class="w-6 h-6" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M6 18L18 6M6 6l12 12" />
+      </svg>
+    </button>
+
+    <!-- Modal Content -->
+    <div class="max-w-4xl max-h-[85vh] flex flex-col items-center justify-center text-center">
+      <div class="relative overflow-hidden rounded-xl border border-gold/30 shadow-2xl max-h-[72vh]">
+        <img
+          id="lightbox-img"
+          src=""
+          alt=""
+          class="w-auto max-h-[72vh] max-w-full object-contain"
+        />
+      </div>
+      <p id="lightbox-caption" class="mt-4 font-serif italic text-base sm:text-xl text-champagne/90 max-w-xl px-4">
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import Swiper from 'swiper';
+  import { Navigation, Pagination, Autoplay } from 'swiper/modules';
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  // Initialize Swiper
+  const swiper = new Swiper('.wedding-swiper', {
+    modules: [Navigation, Pagination, Autoplay],
+    slidesPerView: 1.15,
+    spaceBetween: 16,
+    centeredSlides: false,
+    loop: true,
+    autoplay: {
+      delay: 4500,
+      disableOnInteraction: false,
+      pauseOnMouseEnter: true,
+    },
+    pagination: {
+      el: '.swiper-pagination',
+      clickable: true,
+    },
+    navigation: {
+      nextEl: '.swiper-button-next',
+      prevEl: '.swiper-button-prev',
+    },
+    breakpoints: {
+      640: {
+        slidesPerView: 2.2,
+        spaceBetween: 20,
+      },
+      1024: {
+        slidesPerView: 3.2,
+        spaceBetween: 28,
+      },
+    },
+  });
+
+  // Lightbox logic
+  const lightbox = document.getElementById('lightbox-modal');
+  const lightboxImg = document.getElementById('lightbox-img') as HTMLImageElement;
+  const lightboxCaption = document.getElementById('lightbox-caption');
+  const closeBtn = document.getElementById('lightbox-close');
+  const galleryItems = document.querySelectorAll('.gallery-item');
+
+  const openLightbox = (src: string, alt: string, caption: string) => {
+    if (!lightbox || !lightboxImg) return;
+    lightboxImg.src = src;
+    lightboxImg.alt = alt;
+    if (lightboxCaption) lightboxCaption.textContent = caption;
+
+    lightbox.classList.remove('opacity-0', 'pointer-events-none');
+    lightbox.classList.add('opacity-100', 'pointer-events-auto');
+    document.body.classList.add('overflow-hidden');
+  };
+
+  const closeLightbox = () => {
+    if (!lightbox) return;
+    lightbox.classList.add('opacity-0', 'pointer-events-none');
+    lightbox.classList.remove('opacity-100', 'pointer-events-auto');
+    document.body.classList.remove('overflow-hidden');
+  };
+
+  galleryItems.forEach((item) => {
+    item.addEventListener('click', () => {
+      const isArabic = document.documentElement.lang === 'ar';
+      const src = item.getAttribute('data-src') || '';
+      const alt = (isArabic ? item.getAttribute('data-alt-ar') : item.getAttribute('data-alt-fr')) || '';
+      const caption = (isArabic ? item.getAttribute('data-caption-ar') : item.getAttribute('data-caption-fr')) || '';
+      openLightbox(src, alt, caption);
+    });
+  });
+
+  // Update in-card hover captions on language change
+  window.addEventListener('wedding-lang-changed', (e: Event) => {
+    const customEvent = e as CustomEvent<{ lang: 'fr' | 'ar' }>;
+    const lang = customEvent.detail.lang;
+    galleryItems.forEach((item) => {
+      const captionEl = item.querySelector('.gallery-caption-text');
+      if (captionEl) {
+        captionEl.textContent = (lang === 'ar' ? item.getAttribute('data-caption-ar') : item.getAttribute('data-caption-fr')) || '';
+      }
+    });
+  });
+
+  closeBtn?.addEventListener('click', closeLightbox);
+  lightbox?.addEventListener('click', (e) => {
+    if (e.target === lightbox) closeLightbox();
+  });
+
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') closeLightbox();
+  });
+
+  // Scroll reveal
+  gsap.from('#gallery .gallery-header', {
+    scrollTrigger: {
+      trigger: '#gallery',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    },
+    y: 30,
+    opacity: 0,
+    duration: 1,
+    ease: 'power3.out'
+  });
+</script>

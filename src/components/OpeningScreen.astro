@@ -1,0 +1,175 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<div
+  id="opening-screen"
+  class="fixed inset-0 z-50 flex flex-col items-center justify-center bg-[#141312] text-ivory overflow-y-auto cursor-pointer select-none transition-all duration-700 p-4"
+  role="dialog"
+  aria-modal="true"
+  aria-label="Écran d'accueil de l'invitation"
+>
+  <!-- Background Ambient Glow -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,168,89,0.18)_0%,rgba(20,19,18,0.96)_75%)] pointer-events-none"></div>
+
+  <!-- Decorative Corner Borders -->
+  <div class="absolute top-4 left-4 w-8 h-8 border-t border-l border-gold/40 pointer-events-none"></div>
+  <div class="absolute top-4 right-4 w-8 h-8 border-t border-r border-gold/40 pointer-events-none"></div>
+  <div class="absolute bottom-4 left-4 w-8 h-8 border-b border-l border-gold/40 pointer-events-none"></div>
+  <div class="absolute bottom-4 right-4 w-8 h-8 border-b border-r border-gold/40 pointer-events-none"></div>
+
+  <!-- Top Language Switcher on Opening Screen (Stop propagation so clicking lang doesn't dismiss) -->
+  <div
+    class="opening-anim absolute top-4 sm:top-6 z-30 flex items-center gap-1 bg-[#1F1C1A] border border-gold/40 rounded-full p-1 shadow-lg"
+    onclick="event.stopPropagation()"
+  >
+    <button
+      type="button"
+      data-lang-switch="fr"
+      class="px-3 py-1 text-[11px] rounded-full font-medium transition-all duration-300 bg-gold text-white"
+    >
+      FR
+    </button>
+    <button
+      type="button"
+      data-lang-switch="ar"
+      class="px-3 py-1 text-[11px] rounded-full font-medium transition-all duration-300 text-champagne/80 hover:text-gold font-serif"
+    >
+      العربية
+    </button>
+  </div>
+
+  <!-- Centered Content Box -->
+  <div class="relative z-10 flex flex-col items-center text-center px-4 max-w-md mx-auto my-auto py-2">
+    <!-- Subtle Tagline -->
+    <p data-i18n="opening.badge" class="opening-anim text-[10px] uppercase tracking-widest-2xl text-gold-300/80 mb-2 font-medium">
+      {wedding.welcome.badge.fr}
+    </p>
+
+    <!-- Compact Monogram Circle -->
+    <div class="opening-anim relative flex items-center justify-center w-20 h-20 sm:w-28 sm:h-28 my-1 sm:my-2">
+      <div class="absolute inset-0 rounded-full border border-gold/30 animate-spin-slow"></div>
+      <div class="absolute inset-1 rounded-full border border-gold/40 border-dashed"></div>
+      <div class="absolute inset-2 rounded-full bg-gradient-to-b from-[#25221F] to-[#141312] border border-gold/25 shadow-xl flex items-center justify-center">
+        <span data-i18n="hero.initials" class="font-serif text-xl sm:text-2xl tracking-wider text-gold-light font-normal drop-shadow-md">
+          {wedding.initials.fr}
+        </span>
+      </div>
+    </div>
+
+    <!-- Couple Names -->
+    <h1 class="opening-anim font-serif text-2xl sm:text-4xl font-light tracking-wide text-ivory my-1">
+      <span data-i18n="hero.bride">{wedding.bride.fr}</span>
+      <span class="text-gold italic font-serif mx-1">&amp;</span>
+      <span data-i18n="hero.groom">{wedding.groom.fr}</span>
+    </h1>
+
+    <!-- Date & Location -->
+    <div class="opening-anim flex items-center gap-2 my-1 text-[11px] sm:text-xs tracking-widest text-champagne/75 uppercase">
+      <span data-i18n="hero.date">{wedding.displayDate.fr}</span>
+      <span class="w-1 h-1 rounded-full bg-gold/60"></span>
+      <span data-i18n="hero.city">{wedding.city.fr}</span>
+    </div>
+
+    <div class="opening-anim w-12 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent my-3"></div>
+
+    <!-- Enter Button (Prominent & always visible) -->
+    <button
+      id="open-invitation-btn"
+      type="button"
+      class="opening-anim group relative px-6 py-2.5 sm:px-8 sm:py-3 rounded-full overflow-hidden border border-gold/60 bg-gradient-to-r from-[#201D1A] to-[#2B2722] hover:border-gold transition-all duration-300 shadow-xl hover:shadow-[0_0_25px_rgba(197,168,89,0.35)] focus:outline-none"
+      aria-label="Ouvrir l'invitation"
+    >
+      <span class="absolute inset-0 w-full h-full bg-gradient-to-r from-transparent via-gold/20 to-transparent -translate-x-full group-hover:translate-x-full transition-transform duration-700 ease-out"></span>
+      <span class="relative z-10 flex items-center gap-2 text-xs font-medium tracking-widest uppercase text-gold-light group-hover:text-white transition-colors duration-300">
+        <span data-i18n="opening.btn">Ouvrir l'Invitation</span>
+        <svg class="w-3.5 h-3.5 text-gold group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M14 5l7 7m0 0l-7 7m7-7H3" />
+        </svg>
+      </span>
+    </button>
+
+    <!-- Tap anywhere hint -->
+    <p class="opening-anim mt-3 text-[10px] uppercase tracking-widest text-gold-light/50 font-light">
+      (Cliquez n'importe où pour entrer)
+    </p>
+  </div>
+</div>
+
+<script>
+  import gsap from 'gsap';
+
+  const screen = document.getElementById('opening-screen');
+  const btn = document.getElementById('open-invitation-btn');
+
+  let isDismissed = false;
+
+  const unlockScrollAndDismiss = () => {
+    if (isDismissed || !screen) return;
+    isDismissed = true;
+
+    sessionStorage.setItem('invitation_opened', 'true');
+    document.body.classList.remove('overflow-hidden');
+    document.documentElement.classList.remove('overflow-hidden');
+
+    gsap.to(screen, {
+      opacity: 0,
+      yPercent: -100,
+      duration: 0.8,
+      ease: 'power3.inOut',
+      onComplete: () => {
+        screen.style.display = 'none';
+        screen.remove();
+        window.dispatchEvent(new CustomEvent('invitation-opened'));
+      }
+    });
+  };
+
+  // Check if user has already opened the invitation or arrived via hash link (e.g. #welcome)
+  const hasHash = window.location.hash && window.location.hash.length > 1;
+  const alreadyOpened = sessionStorage.getItem('invitation_opened') === 'true';
+
+  if (hasHash || alreadyOpened) {
+    if (screen) {
+      screen.style.display = 'none';
+      screen.remove();
+    }
+    document.body.classList.remove('overflow-hidden');
+    document.documentElement.classList.remove('overflow-hidden');
+  } else {
+    // Lock scroll temporarily until user enters
+    document.body.classList.add('overflow-hidden');
+
+    // Entrance animation
+    gsap.from('.opening-anim', {
+      y: 15,
+      opacity: 0,
+      duration: 0.9,
+      stagger: 0.1,
+      ease: 'power2.out'
+    });
+
+    // Dismiss on button click
+    btn?.addEventListener('click', (e) => {
+      e.stopPropagation();
+      unlockScrollAndDismiss();
+    });
+
+    // Dismiss on click ANYWHERE on the screen
+    screen?.addEventListener('click', unlockScrollAndDismiss);
+
+    // Dismiss on scroll attempt or key press
+    window.addEventListener('wheel', unlockScrollAndDismiss, { once: true, passive: true });
+    window.addEventListener('touchmove', unlockScrollAndDismiss, { once: true, passive: true });
+    window.addEventListener('keydown', (e) => {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Escape') {
+        unlockScrollAndDismiss();
+      }
+    }, { once: true });
+
+    // Safety fallback: unlock after 6s no matter what so the user is never stuck
+    setTimeout(() => {
+      document.body.classList.remove('overflow-hidden');
+    }, 6000);
+  }
+</script>

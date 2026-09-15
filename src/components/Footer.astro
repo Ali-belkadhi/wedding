@@ -1,0 +1,57 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<footer class="bg-[#141312] text-ivory py-20 sm:py-28 px-6 relative overflow-hidden border-t border-gold/20">
+  <!-- Subtle Background Glow -->
+  <div class="absolute inset-0 bg-[radial-gradient(circle_at_center,rgba(197,168,89,0.07)_0%,transparent_70%)] pointer-events-none"></div>
+
+  <div class="max-w-4xl mx-auto text-center relative z-10">
+    <!-- Monogram Circle -->
+    <div class="w-20 h-20 rounded-full border border-gold/40 mx-auto flex items-center justify-center mb-8 relative shadow-lg">
+      <div class="absolute inset-1 rounded-full border border-gold/20"></div>
+      <span data-i18n="hero.initials" class="font-serif text-2xl font-light text-gold-light tracking-widest">
+        {wedding.initials.fr}
+      </span>
+    </div>
+
+    <!-- Couple Names -->
+    <h2 class="font-serif text-4xl sm:text-5xl md:text-6xl font-light text-ivory tracking-tight mb-4">
+      <span data-i18n="hero.bride">{wedding.bride.fr}</span>
+      <span class="text-gold italic font-serif mx-1">&amp;</span>
+      <span data-i18n="hero.groom">{wedding.groom.fr}</span>
+    </h2>
+
+    <!-- Wedding Date & City -->
+    <div class="flex items-center justify-center gap-3 text-xs sm:text-sm tracking-widest-xl uppercase text-champagne/80 mb-6 font-light">
+      <span data-i18n="hero.date">{wedding.displayDate.fr}</span>
+      <span class="w-1 h-1 rounded-full bg-gold"></span>
+      <span data-i18n="hero.city">{wedding.city.fr}</span>
+    </div>
+
+    <div class="w-16 h-px bg-gradient-to-r from-transparent via-gold/50 to-transparent mx-auto mb-8"></div>
+
+    <!-- Romantic Short Message -->
+    <p data-i18n="footer.quote" class="font-serif italic text-base sm:text-lg text-champagne/90 max-w-lg mx-auto mb-12 font-light leading-relaxed">
+      « Que chaque regard partagé ce jour-là soit le reflet d'une éternité de bonheur. Merci d'écrire cette légende avec nous. »
+    </p>
+
+    <!-- Return to Top Button -->
+    <a
+      href="#hero"
+      class="inline-flex items-center gap-2 text-[10px] uppercase tracking-widest-2xl text-gold-light/70 hover:text-gold transition-colors duration-300 group py-2"
+      aria-label="Remonter en haut de page"
+    >
+      <svg class="w-3.5 h-3.5 text-gold group-hover:-translate-y-1 transition-transform duration-300" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 15l7-7 7 7" />
+      </svg>
+      <span data-i18n="footer.top">Retour en Haut</span>
+    </a>
+
+    <!-- Editorial Signature -->
+    <div class="mt-16 pt-8 border-t border-gold/10 flex flex-col sm:flex-row items-center justify-between text-[11px] text-ivory/40 font-light gap-4">
+      <p>© {wedding.displayYear} <span data-i18n="hero.bride">{wedding.bride.fr}</span> &amp; <span data-i18n="hero.groom">{wedding.groom.fr}</span>. <span data-i18n="footer.rights">Tous droits réservés.</span></p>
+      <p data-i18n="footer.tag" class="font-serif italic text-gold/60">Célébration d'Amour &amp; Raffinement</p>
+    </div>
+  </div>
+</footer>

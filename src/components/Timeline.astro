@@ -1,0 +1,100 @@
+---
+import { wedding } from '../data/wedding';
+---
+
+<section id="timeline" class="py-24 md:py-36 px-6 bg-ivory relative overflow-hidden">
+  <div class="max-w-4xl mx-auto">
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-16 md:mb-24 timeline-header">
+      <span data-i18n="timeline.badge" class="text-[11px] uppercase tracking-widest-2xl text-gold-dark font-medium block mb-3">
+        Le Déroulement
+      </span>
+      <h2 data-i18n="timeline.title" class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-charcoal tracking-tight mb-4">
+        Programme de la Journée
+      </h2>
+      <p data-i18n="timeline.sub" class="text-xs md:text-sm font-light text-charcoal/70">
+        Les heures précieuses d'une journée inoubliable.
+      </p>
+      <div class="w-12 h-px bg-gold/40 mx-auto mt-6"></div>
+    </div>
+
+    <!-- Timeline Wrapper -->
+    <div class="relative max-w-2xl mx-auto">
+      <!-- Vertical Central Line -->
+      <div class="absolute left-4 rtl:left-auto rtl:right-4 sm:left-1/2 sm:rtl:left-1/2 sm:rtl:right-auto top-4 bottom-4 -translate-x-1/2 w-px bg-gradient-to-b from-transparent via-gold/50 to-transparent"></div>
+
+      <!-- Timeline Items -->
+      <div class="space-y-12 sm:space-y-16">
+        {wedding.schedule.map((item, index) => {
+          const isEven = index % 2 === 0;
+          const tNum = index + 1;
+          return (
+            <div class={`timeline-row relative flex flex-col sm:flex-row items-start ${isEven ? 'sm:flex-row-reverse' : ''} gap-6 sm:gap-12 pl-12 rtl:pl-0 rtl:pr-12 sm:pl-0 sm:rtl:pr-0`}>
+              <!-- Time & Content Card -->
+              <div class={`w-full sm:w-1/2 ${isEven ? 'sm:text-left sm:rtl:text-right sm:pl-8 sm:rtl:pl-0 sm:rtl:pr-8' : 'sm:text-right sm:rtl:text-left sm:pr-8 sm:rtl:pr-0 sm:rtl:pl-8'}`}>
+                <div class="inline-block px-3 py-1 rounded-full bg-champagne-100 border border-gold/30 text-gold-dark font-serif text-lg md:text-xl font-light mb-2 shadow-xs">
+                  {item.time}
+                </div>
+                {item.tag && (
+                  <span class="inline-block ml-2 rtl:ml-0 rtl:mr-2 sm:ml-0 sm:rtl:mr-0 text-[10px] uppercase tracking-wider text-charcoal/50 font-medium">
+                    • <span data-i18n={`timeline.t${tNum}.tag`}>{item.tag.fr}</span>
+                  </span>
+                )}
+                <h3 data-i18n={`timeline.t${tNum}.title`} class="font-serif text-2xl font-light text-charcoal mt-1 tracking-tight">
+                  {item.title.fr}
+                </h3>
+                {item.description && (
+                  <p data-i18n={`timeline.t${tNum}.desc`} class="text-xs sm:text-sm text-charcoal/75 font-light mt-2 leading-relaxed max-w-sm ml-0 sm:inline-block">
+                    {item.description.fr}
+                  </p>
+                )}
+              </div>
+
+              <!-- Node Center Marker -->
+              <div class="absolute left-4 rtl:left-auto rtl:right-4 sm:left-1/2 sm:rtl:left-1/2 sm:rtl:right-auto top-2 -translate-x-1/2 flex items-center justify-center">
+                <div class="w-7 h-7 rounded-full bg-ivory border-2 border-gold flex items-center justify-center shadow-md">
+                  <div class="w-2 h-2 rounded-full bg-gold-dark animate-ping opacity-60"></div>
+                </div>
+              </div>
+
+              <!-- Empty spacer on other side for balanced desktop alignment -->
+              <div class="hidden sm:block sm:w-1/2"></div>
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from('#timeline .timeline-header', {
+    scrollTrigger: {
+      trigger: '#timeline',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    },
+    y: 30,
+    opacity: 0,
+    duration: 1,
+    ease: 'power3.out'
+  });
+
+  gsap.from('#timeline .timeline-row', {
+    scrollTrigger: {
+      trigger: '#timeline',
+      start: 'top 75%',
+      toggleActions: 'play none none none'
+    },
+    y: 35,
+    opacity: 0,
+    duration: 0.9,
+    stagger: 0.18,
+    ease: 'power3.out'
+  });
+</script>

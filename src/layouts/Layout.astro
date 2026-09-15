@@ -1,0 +1,83 @@
+---
+import '../styles/global.css';
+import 'swiper/css';
+import 'swiper/css/navigation';
+import 'swiper/css/pagination';
+import 'swiper/css/effect-fade';
+import { wedding } from '../data/wedding';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const {
+  title = `${wedding.coupleDisplay.fr} — Mariage | ${wedding.displayDate.fr}`,
+  description = `Nous vous convions avec joie à célébrer le mariage de ${wedding.coupleDisplay.fr} le ${wedding.displayDate.fr} à ${wedding.venue.name.fr}, ${wedding.city.fr}, ${wedding.country.fr}.`
+} = Astro.props;
+
+const canonicalURL = new URL(Astro.url.pathname, Astro.site || 'https://meriem-refki-wedding.com');
+---
+
+<!doctype html>
+<html lang="fr" class="scroll-smooth">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <meta name="generator" content={Astro.generator} />
+
+    <!-- Primary Meta Tags -->
+    <title>{title}</title>
+    <meta name="title" content={title} />
+    <meta name="description" content={description} />
+    <meta name="robots" content="index, follow" />
+    <link rel="canonical" href={canonicalURL} />
+
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={canonicalURL} />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={wedding.venue.image} />
+    <meta property="og:site_name" content={`${wedding.coupleDisplay.fr} Wedding`} />
+
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image" />
+    <meta property="twitter:url" content={canonicalURL} />
+    <meta property="twitter:title" content={title} />
+    <meta property="twitter:description" content={description} />
+    <meta property="twitter:image" content={wedding.venue.image} />
+
+    <!-- Google Fonts Preconnect -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+
+    <!-- JSON-LD Event Schema -->
+    <script type="application/ld+json" set:html={JSON.stringify({
+      "@context": "https://schema.org",
+      "@type": "Event",
+      "name": `Mariage de ${wedding.coupleDisplay.fr}`,
+      "startDate": wedding.date,
+      "eventAttendanceMode": "https://schema.org/OfflineEventAttendanceMode",
+      "eventStatus": "https://schema.org/EventScheduled",
+      "location": {
+        "@type": "Place",
+        "name": wedding.venue.name.fr,
+        "address": {
+          "@type": "PostalAddress",
+          "streetAddress": wedding.venue.address.fr,
+          "addressLocality": wedding.city.fr,
+          "addressCountry": wedding.country.fr
+        }
+      },
+      "image": [wedding.venue.image],
+      "description": description
+    })} />
+  </head>
+  <body class="bg-ivory text-charcoal selection:bg-gold-200 selection:text-charcoal-900 antialiased min-h-screen">
+    <slot />
+    <!-- Global i18n client script -->
+    <script src="../scripts/i18n.ts"></script>
+  </body>
+</html>

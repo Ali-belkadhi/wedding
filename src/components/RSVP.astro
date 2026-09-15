@@ -1,0 +1,223 @@
+---
+import { wedding } from '../data/wedding';
+
+const defaultWhatsAppUrl = `https://wa.me/${wedding.whatsapp.number}?text=${encodeURIComponent(wedding.whatsapp.defaultMessage.fr)}`;
+---
+
+<section id="rsvp" class="py-24 md:py-36 px-6 bg-ivory relative overflow-hidden">
+  <!-- Subtle decorative watermark -->
+  <div class="absolute inset-0 flex items-center justify-center pointer-events-none opacity-[0.02]">
+    <span class="font-serif text-[30rem] leading-none select-none text-gold">RSVP</span>
+  </div>
+
+  <div class="max-w-4xl mx-auto relative z-10">
+    <!-- Header -->
+    <div class="text-center max-w-2xl mx-auto mb-14 md:mb-18 rsvp-header">
+      <span data-i18n="rsvp.badge" class="text-[11px] uppercase tracking-widest-2xl text-gold-dark font-medium block mb-3">
+        Réponse Souhaitée
+      </span>
+      <h2 data-i18n="rsvp.title" class="font-serif text-3xl sm:text-4xl md:text-5xl font-light text-charcoal tracking-tight mb-4">
+        Confirmez Votre Présence
+      </h2>
+      <p data-i18n="rsvp.sub" class="text-xs md:text-sm font-light text-charcoal/70">
+        Votre présence à nos côtés illuminera cette journée d'un éclat inestimable.
+      </p>
+      <div class="w-12 h-px bg-gold/40 mx-auto mt-6"></div>
+    </div>
+
+    <!-- RSVP Central Luxury Card -->
+    <div class="max-w-2xl mx-auto rounded-3xl bg-champagne-50/80 backdrop-blur-md p-8 sm:p-12 border border-gold/30 shadow-xl rsvp-card text-center relative overflow-hidden">
+      <!-- Top Decorative Accent -->
+      <div class="w-20 h-px bg-gradient-to-r from-transparent via-gold to-transparent mx-auto mb-8"></div>
+
+      <!-- Deadline Notice -->
+      <div class="inline-flex items-center gap-2 px-5 py-2 rounded-full bg-ivory border border-gold/30 text-gold-dark text-xs uppercase tracking-widest font-medium mb-6 shadow-xs">
+        <svg class="w-3.5 h-3.5 text-gold-dark" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+        </svg>
+        <span data-i18n="rsvp.deadline">Réponse avant le {wedding.whatsapp.deadline.fr}</span>
+      </div>
+
+      <h3 class="font-serif text-2xl sm:text-3xl font-light text-charcoal mb-3">
+        <span data-i18n="hero.bride">{wedding.bride.fr}</span> &amp; <span data-i18n="hero.groom">{wedding.groom.fr}</span>
+      </h3>
+      <p data-i18n="rsvp.desc" class="text-xs sm:text-sm text-charcoal/75 font-light max-w-md mx-auto mb-8 leading-relaxed">
+        {wedding.whatsapp.defaultMessage.fr}
+      </p>
+
+      <!-- Optional Guest Name Input for Personalized WhatsApp Message -->
+      <div class="max-w-md mx-auto mb-8 text-left rtl:text-right">
+        <label for="guest-name" data-i18n="rsvp.labelName" class="block text-[11px] uppercase tracking-widest text-charcoal/70 mb-2 font-medium">
+          Votre Prénom &amp; Nom (Optionnel)
+        </label>
+        <input
+          id="guest-name"
+          type="text"
+          data-i18n-placeholder="rsvp.placeholder"
+          placeholder="Ex: Sarah & Mehdi..."
+          class="w-full px-4 py-3 rounded-xl bg-ivory border border-gold/30 focus:border-gold focus:outline-none focus:ring-1 focus:ring-gold text-base sm:text-sm text-charcoal placeholder:text-charcoal/35 transition-colors shadow-xs text-left rtl:text-right"
+        />
+      </div>
+
+      <!-- Action Buttons -->
+      <div class="flex flex-col sm:flex-row gap-4 justify-center items-center max-w-md mx-auto">
+        <!-- WhatsApp Confirmation Button -->
+        <a
+          id="whatsapp-rsvp-btn"
+          href={defaultWhatsAppUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          data-phone={wedding.whatsapp.number}
+          class="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-3 px-6 py-3.5 rounded-full bg-[#1F2E23] text-emerald-100 border border-emerald-600/40 hover:bg-[#16221A] hover:border-emerald-500 hover:text-white transition-all duration-300 shadow-md group"
+          aria-label="Confirmer ma présence sur WhatsApp"
+        >
+          <!-- WhatsApp Icon -->
+          <svg class="w-5 h-5 text-emerald-400 group-hover:scale-110 transition-transform duration-300" viewBox="0 0 24 24" fill="currentColor">
+            <path d="M12.031 6.172c-3.181 0-5.767 2.586-5.768 5.766-.001 1.298.38 2.27 1.019 3.287l-.711 2.598 2.664-.699c.971.54 1.83.822 2.796.823h.001c3.182 0 5.768-2.587 5.768-5.766.001-3.181-2.584-5.769-5.769-5.769zm3.393 8.167c-.145.408-.846.777-1.18.828-.319.049-.737.078-2.18-.517-1.716-.71-2.827-2.457-2.913-2.571-.086-.114-.698-.929-.698-1.772 0-.843.441-1.258.598-1.43.157-.172.344-.215.459-.215.115 0 .23.001.33.006.105.006.246-.04.385.293.144.344.492 1.201.535 1.288.043.086.072.187.014.302-.057.115-.086.187-.172.287-.086.1-.182.224-.26.3-.086.086-.176.18-.076.352.1.172.445.735.955 1.19.658.587 1.213.769 1.385.855.172.086.273.072.373-.043.1-.115.43-.502.545-.674.115-.172.23-.144.387-.086.158.057 1.002.472 1.174.558.172.086.287.129.33.201.043.072.043.416-.102.824zM12 2C6.477 2 2 6.477 2 12c0 1.891.524 3.66 1.434 5.176L2 22l4.954-1.399C8.423 21.492 10.151 22 12 22c5.523 0 10-6.477 10-12S17.523 2 12 2z"/>
+          </svg>
+          <span data-i18n="rsvp.btnWa" class="text-xs uppercase tracking-widest font-medium">
+            Confirmer sur WhatsApp
+          </span>
+        </a>
+
+        <!-- Add to Calendar Button (ICS Generator) -->
+        <button
+          id="add-to-calendar-btn"
+          type="button"
+          class="w-full sm:w-auto flex-1 inline-flex items-center justify-center gap-2.5 px-6 py-3.5 rounded-full bg-ivory text-charcoal border border-gold/40 hover:bg-gold-dark hover:border-gold hover:text-white transition-all duration-300 shadow-sm"
+          aria-label="Ajouter au calendrier (.ics)"
+        >
+          <svg class="w-4 h-4 text-gold-dark group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.5" d="M8 7V3m8 4V3m-9 8h10M5 21h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v12a2 2 0 002 2z" />
+          </svg>
+          <span data-i18n="rsvp.btnCal" class="text-xs uppercase tracking-widest font-medium">
+            Ajouter au Calendrier
+          </span>
+        </button>
+      </div>
+
+      <!-- Calendar Confirmation Message -->
+      <div id="calendar-feedback" data-i18n="rsvp.feedback" class="hidden mt-4 text-xs text-emerald-700 font-medium">
+        ✓ Fichier .ics téléchargé avec succès !
+      </div>
+
+      <!-- WhatsApp number info -->
+      <p data-i18n="rsvp.contact" class="mt-8 text-[11px] text-charcoal/50 font-light">
+        Contact organisateurs : {wedding.whatsapp.displayNumber}
+      </p>
+    </div>
+  </div>
+</section>
+
+<script>
+  import gsap from 'gsap';
+  import { ScrollTrigger } from 'gsap/ScrollTrigger';
+  import { wedding } from '../data/wedding';
+  import { i18nDict, type Lang } from '../data/i18n';
+
+  gsap.registerPlugin(ScrollTrigger);
+
+  gsap.from('#rsvp .rsvp-header', {
+    scrollTrigger: {
+      trigger: '#rsvp',
+      start: 'top 80%',
+      toggleActions: 'play none none none'
+    },
+    y: 30,
+    opacity: 0,
+    duration: 1,
+    ease: 'power3.out'
+  });
+
+  gsap.from('#rsvp .rsvp-card', {
+    scrollTrigger: {
+      trigger: '#rsvp',
+      start: 'top 75%',
+      toggleActions: 'play none none none'
+    },
+    y: 40,
+    opacity: 0,
+    duration: 1.1,
+    ease: 'power3.out'
+  });
+
+  // Dynamic WhatsApp personalization
+  const guestNameInput = document.getElementById('guest-name') as HTMLInputElement | null;
+  const whatsappBtn = document.getElementById('whatsapp-rsvp-btn') as HTMLAnchorElement | null;
+
+  const updateWhatsAppHref = () => {
+    if (!whatsappBtn) return;
+    const phone = whatsappBtn.getAttribute('data-phone') || '21698123456';
+    const lang = (document.documentElement.lang as Lang) || 'fr';
+    const name = guestNameInput?.value.trim() || '';
+
+    let text = i18nDict['rsvp.waMsgDefault'][lang];
+    if (name) {
+      text = i18nDict['rsvp.waMsgCustom'][lang].replace('{name}', name);
+    }
+    whatsappBtn.href = `https://wa.me/${phone}?text=${encodeURIComponent(text)}`;
+  };
+
+  guestNameInput?.addEventListener('input', updateWhatsAppHref);
+  window.addEventListener('wedding-lang-changed', updateWhatsAppHref);
+
+  // ICS Calendar File Generator
+  const calendarBtn = document.getElementById('add-to-calendar-btn');
+  const feedbackEl = document.getElementById('calendar-feedback');
+
+  const generateICS = () => {
+    const isArabic = document.documentElement.lang === 'ar';
+    const weddingDateObj = new Date(wedding.date);
+    const startDate = weddingDateObj.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    const endDateObj = new Date(weddingDateObj.getTime() + 8 * 60 * 60 * 1000); // 8 hours later
+    const endDate = endDateObj.toISOString().replace(/[-:]/g, "").split(".")[0] + "Z";
+    const coupleName = isArabic ? `${wedding.bride.ar} & ${wedding.groom.ar}` : `${wedding.bride.fr} & ${wedding.groom.fr}`;
+    const venueName = isArabic ? wedding.venue.name.ar : wedding.venue.name.fr;
+    const venueAddress = isArabic ? wedding.venue.address.ar : wedding.venue.address.fr;
+    const title = isArabic ? `حفل زفاف ${coupleName}` : `Mariage de ${coupleName}`;
+    const description = isArabic ? `يسعدنا الاحتفال بزفاف ${coupleName} في ${venueName}.` : `Célébration du mariage de ${coupleName} au ${venueName}.`;
+    const location = `${venueName}\\, ${venueAddress}`;
+
+    const icsContent = [
+      "BEGIN:VCALENDAR",
+      "VERSION:2.0",
+      `PRODID:-//${coupleName}//Wedding Invitation//FR`,
+      "CALSCALE:GREGORIAN",
+      "METHOD:PUBLISH",
+      "BEGIN:VEVENT",
+      `UID:wedding-${Date.now()}@meriem-refki.com`,
+      `DTSTAMP:${new Date().toISOString().replace(/[-:]/g, "").split(".")[0]}Z`,
+      `DTSTART:${startDate}`,
+      `DTEND:${endDate}`,
+      `SUMMARY:${title}`,
+      `DESCRIPTION:${description}`,
+      `LOCATION:${location}`,
+      "STATUS:CONFIRMED",
+      "SEQUENCE:0",
+      "BEGIN:VALARM",
+      "TRIGGER:-P2D",
+      "ACTION:DISPLAY",
+      `DESCRIPTION:Rappel: ${title}`,
+      "END:VALARM",
+      "END:VEVENT",
+      "END:VCALENDAR"
+    ].join("\r\n");
+
+    const blob = new Blob([icsContent], { type: "text/calendar;charset=utf-8" });
+    const link = document.createElement("a");
+    link.href = window.URL.createObjectURL(blob);
+    link.setAttribute("download", isArabic ? "mariage-meriem-refki.ics" : "mariage-meriem-et-refki.ics");
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+
+    if (feedbackEl) {
+      feedbackEl.classList.remove('hidden');
+      setTimeout(() => {
+        feedbackEl.classList.add('hidden');
+      }, 4000);
+    }
+  };
+
+  calendarBtn?.addEventListener('click', generateICS);
+</script>
